@@ -44,7 +44,7 @@ class GoogleSheets():
             table = result.get('values', [])
             if not table:
                 raise
-        except Exception as err:
+        except:
             print('Provided spreadsheet not accessible.')
             print('Ensure the following URL is valid:')
             print('https://docs.google.com/spreadsheets/d/' + sheet_id)
