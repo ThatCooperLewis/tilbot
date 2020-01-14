@@ -1,2 +1,13 @@
+# Local Variables & Configuration
 .env
-config.json
+sheets.cfg
+
+# Google Credentials
+credentials.json
+gdrive_token.pickle
+
+# Python
+/env
+
+# Visual Studio
+/.vscode
