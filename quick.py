@@ -9,6 +9,7 @@ from google.auth.transport.requests import Request
 import ast
 from collections import OrderedDict
 
+
 class GoogleSheets():
     def __init__(self, cfg):
         self.config = cfg
@@ -28,27 +29,32 @@ class GoogleSheets():
                 self.cred.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    self.config['credentials_path'], \
+                    self.config['credentials_path'],
                     self.config['scope'])
                 self.cred = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open(self.token_path, 'wb') as token:
                 pickle.dump(self.cred, token)
 
-    def get_dataframe(self, spreadsheet_id):
+    def get_dataframe(self, sheet_id):
         sheet = build('sheets', 'v4', credentials=self.cred).spreadsheets()
-        result = sheet.values().get(spreadsheetId=self.config['id'],
-                                    range=self.config['range']).execute()
-        table = result.get('values', [])
-        if not table:
-            print('Provided spreadsheet missing. Aborting...')
+        try:
+            result = sheet.values().get(spreadsheetId=sheet_id,
+                                        range=self.config['range']).execute()
+            table = result.get('values', [])
+            if not table:
+                raise
+        except Exception as err:
+            print('Provided spreadsheet not accessible.')
+            print('Ensure the following URL is valid:')
+            print('https://docs.google.com/spreadsheets/d/' + sheet_id)
             exit()
         else:
             id_list = []
             id_index = table[0].index('id')
             for row in table[1:]:
                 id_list.append(row[id_index])
-            return pd.DataFrame(table[1:],columns=table[0],index=id_list)
+            return pd.DataFrame(table[1:], columns=table[0], index=id_list)
 
 
 def main(sheet_config):
