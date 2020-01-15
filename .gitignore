@@ -2,9 +2,15 @@
 .env
 sheets.cfg
 
+# Tasks Config
+chron.cfg
+
 # Google Credentials
 credentials.json
 gdrive_token.pickle
+
+# Twilio Credentials
+twilio.cfg
 
 # Python
 /env
