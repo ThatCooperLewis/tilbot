@@ -90,7 +90,7 @@ class SMSReport(ChronJob):
         print('wellsfargo\t: {}'.format(wellsfargo_total))
         print('amex\t: {}'.format(amex_total))
         
-        # self.sms_client.send_message('Heres a test you fucking bitch')
+        self.sms_client.send_message('Heres a test')
 
 
 class GoogleSheets():
